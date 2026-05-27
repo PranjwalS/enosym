@@ -54,5 +54,6 @@ if __name__ == "__main__":
     langs = {}
     for r in records:
         langs[r["language"]] = langs.get(r["language"], 0) + 1
+        # print(r.get("raw"))
     for lang, count in sorted(langs.items()):
         print(f"  {lang}: {count} files")
