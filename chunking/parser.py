@@ -43,7 +43,7 @@ if __name__ == "__main__":
     records = walk_repo(sys.argv[1])
     for record in records:
         tree = parse_file(record)
-        if tree:
-            print(f"parsed {record['path']} — root node type: {tree.root_node.type}")
-        else:
-            print(f"skipped {record['path']}")
+        # if tree:
+        #     print(f"parsed {record['path']} — root node type: {tree.root_node.type}")
+        # else:
+        #     print(f"skipped {record['path']}")

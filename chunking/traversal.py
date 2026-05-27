@@ -41,7 +41,6 @@ def walk_repo(root: str) -> list[dict]:
             "lines": raw.count("\n"),
             "raw": raw
         })
-        print(f"found {file_path.relative_to(root_path)}")
 
     return records
 
@@ -50,10 +49,7 @@ def walk_repo(root: str) -> list[dict]:
 if __name__ == "__main__":
     import sys
     records = walk_repo(sys.argv[1])
-    print(f"\n{len(records)} files found")
     langs = {}
     for r in records:
         langs[r["language"]] = langs.get(r["language"], 0) + 1
         # print(r.get("raw"))
-    for lang, count in sorted(langs.items()):
-        print(f"  {lang}: {count} files")
