@@ -203,7 +203,7 @@ python cli.py
 You should have a working multi-turn conversation. Ask it something, ask a follow-up, make sure it remembers the context.
 
 ---
-
+...
 ## Phase 2 — RAG over your files
 
 **What you're building:** Enosym can read and understand your files. Ask it "what's in my projects folder" or "what does the scoring function in JobScout do" and it actually knows.

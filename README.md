@@ -100,7 +100,7 @@ This document is the north star. Everything listed here is the target. Build ord
 - [ ] Notification toasts for alerts, confirmations, and task completions
 
 ---
-
+...
 ## Privacy and architecture principles
 
 - [ ] Fully local — nothing leaves your machine ever, no API calls to any external service
