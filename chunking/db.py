@@ -4,6 +4,7 @@ DB_PATH = "enosym.db"
 
 def get_conn():
     conn = sqlite3.connect("enosym.db")
+    conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
@@ -37,15 +38,44 @@ def init_db():
     conn.close()
 
 
-def save_nodes(nodes):
+def save_nodes(node_index):
     conn = get_conn()
     conn.executemany("""
-                 INSERT INTO nodes (id, kind, name, file, language, start_ln, end_ln) 
+                 INSERT OR REPLACE INTO nodes (id, kind, name, file, language, start_ln, end_ln) 
                  VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                 [(n["kind"]) for n in nodes])
+                 [(n["id"], n["kind"], n["name"], n["file"], n["language"], n["start"], n["end"]) for key in node_index.keys() for n in [node_index[key]]]
+                )
+    conn.commit()
+    conn.close()
+    
+def save_edges(edges):
+    conn = get_conn()
+    conn.executemany("""
+                     INSERT OR REPLACE INTO edges (source, target, kind)
+                     VALUES (?, ?, ?)""",
+                     [(e["source"], e["target"], e["kind"]) for e in edges]
+                    )
+    conn.commit()
+    conn.close()
 
 
 
-if __name__ == "__main__":
-    init_db()
-    print("db initialized")
+def get_calls_made_by(node_id:str):
+    conn = get_conn()
+    rows = conn.execute("""
+                        SELECT n.id, n.name, n.file FROM edges e
+                        JOIN nodes n ON n.id = e.target
+                        WHERE e.source = ?
+                        """, (node_id,)).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def get_callers_of(node_id: str):
+    conn = get_conn()
+    rows = conn.execute("""
+                        SELECT n.id, n.name, n.file, n.source FROM edges e
+                        JOIN nodes n ON n.id = e.source
+                        WHERE e.target = ?
+                        """, (node_id, )).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
